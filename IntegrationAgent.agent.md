@@ -333,7 +333,7 @@ Before gathering requirements, determine the **ticket type** from the Jira title
 |----------|---------|---------|-------|
 | ContractGroupId | `contractGroupId` in import steps | Free text (number) | e.g., `105710`. From spec's "Population Included" |
 | LOBs | May affect filtering or step logic | `Clinical Travel`, `Locums`, `Non-Clinical`, `All` (multi-select) | From spec's "Population Included". Some pipelines filter by LOB in mapping files or downstream logic. |
-| ContractStages filter | `contractStages` in import-employee-ids | `PRE + WOR` (recommended), `All stages`, `Custom` | Filter which contract stages to import for |
+| ContractStages filter | `contractStages` in import-employee-ids | `No filter (default)`, `PRE + WOR`, `Custom` | **Default is no filter** — only add `contractStages` if the spec explicitly calls for filtering. If the spec mentions specific stages, use those. Do not assume PRE + WOR. |
 | SFTP Login (test) | `login` in sftp-pull | Free text | Prefix with `!` for KeyVault-resolved names |
 | SFTP Login (prod) | `login` in sftp-pull | Free text | |
 | Password Secret Name (test) | `passwordSecretName` | Free text | KeyVault secret name |
