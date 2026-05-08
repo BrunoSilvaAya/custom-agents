@@ -74,7 +74,7 @@ Drag and drop a sample/test file (CSV, TXT) into the chat alongside your prompt.
 | `@IntegrationAgent Build UCHealth import.employeeids` | Starts from a description, asks for spec details |
 | `@IntegrationAgent Update Adventist export.workers mappings — add facility 99851` | Detects mapping update, skips wizard, applies targeted change |
 
-### Legacy V1 Integrations Cleanup Agent
+### LegacyV1 Integrations Agent
 
 **File:** `LegacyV1IntegrationsAgent.agent.md`
 **Invoke:** `@LegacyV1IntegrationsAgent`
