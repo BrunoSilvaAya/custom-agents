@@ -24,7 +24,7 @@ Custom agents are defined as `.agent.md` files placed in the VS Code prompts fol
 
 Some agents require external tools to be installed and configured:
 
-- **Atlassian MCP Server** — Required by agents that fetch Jira tickets (e.g., Integration Agent). Install the [Atlassian MCP extension](https://marketplace.visualstudio.com/items?itemName=Atlassian.atlassian-mcp-for-vscode) and configure it with your Atlassian credentials so the agent can read ticket details, descriptions, and attachments.
+- **Atlassian MCP Server** — Required by agents that fetch Jira tickets (e.g., Integration Agent and LegacyV1IntegrationsAgent). Install the [Atlassian MCP extension](https://marketplace.visualstudio.com/items?itemName=Atlassian.atlassian-mcp-for-vscode) and configure it with your Atlassian credentials so the agent can read ticket details, descriptions, and attachments.
 
 ---
 
@@ -73,3 +73,46 @@ Drag and drop a sample/test file (CSV, TXT) into the chat alongside your prompt.
 | `@IntegrationAgent INT-3257` | Fetches Jira ticket, runs wizard, builds pipeline |
 | `@IntegrationAgent Build UCHealth import.employeeids` | Starts from a description, asks for spec details |
 | `@IntegrationAgent Update Adventist export.workers mappings — add facility 99851` | Detects mapping update, skips wizard, applies targeted change |
+
+### Legacy V1 Integrations Cleanup Agent
+
+**File:** `LegacyV1IntegrationsAgent.agent.md`
+**Invoke:** `@LegacyV1IntegrationsAgent`
+
+#### What It Does
+
+Automates cleanup of deprecated Integration V1 and other legacy integration code after a client has been migrated to V2. Given a Jira ticket key or client name, it:
+
+- Identifies the client and target integration from Jira or the codebase
+- Removes V1 service files, feature flags, and Azure Function triggers tied to that legacy integration
+- Cleans up related DAL entries, integration type constants, and unit tests when they are no longer needed
+- Searches for remaining references so the removal is complete
+- Verifies the final cleanup with a build in the target codebase
+
+#### How to Use It
+
+**Starting from a Jira ticket:**
+```
+@LegacyV1IntegrationsAgent INT-1504
+```
+The agent fetches the ticket, extracts the client and integration type, and performs a guided V1 cleanup workflow.
+
+**Starting from a client name:**
+```
+@LegacyV1IntegrationsAgent Sutter
+```
+Use this when you already know the client and want the agent to find the remaining V1 integration files directly in the codebase.
+
+#### Important Notes
+
+- This agent is for **legacy V1 cleanup only**. Do not use it to create or modify V2 integrations.
+- The agent is designed to preserve V2 handlers, configs, and functions while removing only V1-specific services and triggers.
+- It works best when the Jira ticket clearly identifies the client name and integration type in the description.
+
+#### Example Prompts
+
+| Prompt | What Happens |
+|--------|-------------|
+| `@LegacyV1IntegrationsAgent INT-1504` | Fetches the Jira ticket and removes the V1 integration code for that migrated client |
+| `@LegacyV1IntegrationsAgent DenverHealth` | Searches the codebase for DenverHealth V1 integrations and starts cleanup |
+| `@LegacyV1IntegrationsAgent BaptistHealthKy worker updates` | Targets a specific legacy integration when a client has multiple V1 integrations |
